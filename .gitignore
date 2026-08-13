@@ -1,0 +1,14 @@
+.env
+.vm-password
+.vm-askpass.cmd
+.vm-known-hosts
+deploy/.grafana-password
+deploy/.identity-key
+deploy/.db-password
+deploy/tls/
+backups/*.sql.gz
+evidence/*.json
+evidence/*.png
+evidence/*.txt
+__pycache__/
+.pytest_cache/

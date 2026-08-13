@@ -1,0 +1,40 @@
+#cloud-config
+autoinstall:
+  version: 1
+  apt:
+    fallback: offline-install
+  locale: @@VBOX_INSERT_LOCALE@@
+  keyboard:
+    layout: us
+  shutdown: reboot
+  storage:
+    layout:
+      name: direct
+    swap:
+      size: 0
+  ssh:
+    install-server: true
+    allow-pw: true
+  late-commands:
+    - cp /cdrom/vboxpostinstall.sh /target/root/vboxpostinstall.sh
+    - chmod +x /target/root/vboxpostinstall.sh
+    - curtin in-target --target=/target -- /bin/bash /root/vboxpostinstall.sh --direct
+  user-data:
+    hostname: '@@VBOX_INSERT_HOSTNAME_WITHOUT_DOMAIN@@'
+    users:
+      - name: root
+        primary_group: root
+        groups: sudo
+        lock-passwd: false
+        passwd: '@@VBOX_INSERT_USER_PASSWORD_SHACRYPT512@@'
+        uid: 0
+      - name: '@@VBOX_INSERT_USER_LOGIN@@'
+        gecos: '@@VBOX_INSERT_USER_LOGIN@@'
+        primary_group: '@@VBOX_INSERT_USER_LOGIN@@'
+        groups: sudo
+        lock-passwd: false
+        shell: /bin/bash
+        passwd: '@@VBOX_INSERT_USER_PASSWORD_SHACRYPT512@@'
+    timezone: America/Costa_Rica
+    ntp:
+      enabled: true
