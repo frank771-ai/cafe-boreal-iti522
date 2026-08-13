@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="192" height="192" viewBox="0 0 192 192" role="img" aria-label="Café Boreal">
+  <rect width="192" height="192" rx="42" fill="#174d3b"/>
+  <path d="M35 58h101v55a42 42 0 0 1-42 42H77a42 42 0 0 1-42-42z" fill="#f5f1e8"/>
+  <path d="M136 72h9a25 25 0 0 1 0 50h-13" fill="none" stroke="#e6a15a" stroke-width="13" stroke-linecap="round"/>
+  <path d="M65 35c-11 13 8 17-2 30M94 30c-11 13 8 17-2 30M123 35c-11 13 8 17-2 30" fill="none" stroke="#50c7b7" stroke-width="8" stroke-linecap="round"/>
+  <path d="M55 105c19 13 53 13 72 0" fill="none" stroke="#174d3b" stroke-width="8" stroke-linecap="round"/>
+</svg>
