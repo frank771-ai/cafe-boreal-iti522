@@ -64,4 +64,4 @@ El nombre del profesor queda como campo por completar porque no fue proporcionad
 sha256sum cafe-boreal.ova | tee evidence/vm-sha256.txt
 ```
 
-La entrega final incluye capturas reales de la VM, video demostrativo, imagen OVA y archivo SHA-256 en el paquete de entrega.
+La entrega incluye capturas reales de la VM, imagen OVA y archivo SHA-256. El video end-to-end grabado dentro de la VM queda diferido por solicitud de los autores; `docs/GUION-VIDEO.md` conserva el guion listo para completarlo después.

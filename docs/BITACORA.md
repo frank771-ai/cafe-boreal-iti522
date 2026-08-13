@@ -12,7 +12,7 @@ Equipo: Esteban Molina y Franklin Castillo. Fecha: 13 de agosto de 2026.
 | 16:00 | VirtualBox: VM 4 vCPU, 8 GB, VDI dinámico de 80 GB | Ambos | `VBoxManage showvminfo` |
 | 17:00 | Smoke, carga, backup y restore ejecutados | Ambos | `evidence/` |
 | 17:15 | Capturas de panel, Grafana y Loki | Ambos | `evidence/*.png` |
-| 17:30 | Video <= 3 min y publicación pública | Ambos | `outputs/` y URL pública |
+| 17:30 | Publicación pública y guion de video; grabación diferida por solicitud | Ambos | URL pública y `docs/GUION-VIDEO.md` |
 | Cierre | Exportación OVA y SHA-256 | Ambos | paquete final de entrega |
 
 Los hitos se registraron durante la construcción, verificación y cierre. Los tags se crearon después de comprobar la sección correspondiente.

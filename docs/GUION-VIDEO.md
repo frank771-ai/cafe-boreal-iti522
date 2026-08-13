@@ -2,8 +2,8 @@
 
 **Autores:** Esteban Molina y Franklin Castillo  
 **Curso:** ITI-522 — Práctica de Examen Integrador  
-**Formato:** 1280 × 720, MP4 (H.264/AAC), duración final 2:53.74 (cumple el máximo de 3 minutos)  
-**Naturaleza del material:** recorrido audiovisual preparado a partir de capturas y evidencias verificadas; no se presenta como una grabación en vivo.
+**Formato objetivo:** 1280 × 720, MP4 (H.264/AAC), duración máxima de 3 minutos  
+**Estado:** guion preparado; la grabación end-to-end dentro de la VM quedó diferida por solicitud de los autores.
 
 ## Escena 1 — Portada
 
@@ -11,7 +11,7 @@
 
 **Locución:**
 
-> Presentamos Café Boreal, solución desarrollada para la práctica integradora de ITI quinientos veintidós. El trabajo fue realizado en pareja por Esteban Molina y Franklin Castillo. Este video es un recorrido preparado a partir de capturas y evidencias verificadas del entorno construido en VirtualBox.
+> Presentamos Café Boreal, solución desarrollada para la práctica integradora de ITI quinientos veintidós. El trabajo fue realizado en pareja por Esteban Molina y Franklin Castillo. Esta demostración se ejecuta dentro del entorno construido en VirtualBox.
 
 ## Escena 2 — Entorno VirtualBox
 
@@ -85,7 +85,7 @@
 
 > Café Boreal integra aplicación, datos, seguridad, observabilidad y procedimientos operativos dentro de una máquina virtual reproducible. El código, la documentación, las capturas, las evidencias y las instrucciones de importación quedan organizados para la entrega. Proyecto elaborado por Esteban Molina y Franklin Castillo. Gracias por revisar nuestra demostración.
 
-## Secuencia sugerida para una grabación manual complementaria
+## Secuencia para la grabación dentro de la VM
 
 Si se requiere una demostración estrictamente en vivo, importar la OVA y grabar esta secuencia:
 
