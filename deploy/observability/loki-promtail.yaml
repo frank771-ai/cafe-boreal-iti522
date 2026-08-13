@@ -1,0 +1,93 @@
+apiVersion: v1
+kind: ConfigMap
+metadata: {name: loki-config, namespace: observability}
+data:
+  config.yaml: |
+    auth_enabled: false
+    server: {http_listen_port: 3100}
+    common:
+      path_prefix: /loki
+      storage:
+        filesystem: {chunks_directory: /loki/chunks, rules_directory: /loki/rules}
+      replication_factor: 1
+      ring: {kvstore: {store: inmemory}}
+    schema_config:
+      configs:
+      - {from: "2024-01-01", store: tsdb, object_store: filesystem, schema: v13, index: {prefix: index_, period: 24h}}
+    limits_config: {allow_structured_metadata: false}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata: {name: loki-local, namespace: observability}
+spec:
+  replicas: 1
+  selector: {matchLabels: {app: loki-local}}
+  template:
+    metadata: {labels: {app: loki-local}}
+    spec:
+      containers:
+      - name: loki
+        image: grafana/loki:3.5.3
+        args: [-config.file=/etc/loki/config.yaml]
+        ports: [{name: http, containerPort: 3100}]
+        readinessProbe: {httpGet: {path: /ready, port: http}, initialDelaySeconds: 20, periodSeconds: 10}
+        resources: {requests: {cpu: 50m, memory: 128Mi}, limits: {cpu: 500m, memory: 512Mi}}
+        volumeMounts: [{name: config, mountPath: /etc/loki}, {name: data, mountPath: /loki}]
+      volumes: [{name: config, configMap: {name: loki-config}}, {name: data, emptyDir: {}}]
+---
+apiVersion: v1
+kind: Service
+metadata: {name: loki, namespace: observability}
+spec: {selector: {app: loki-local}, ports: [{name: http, port: 3100, targetPort: http}]}
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata: {name: promtail-local, namespace: observability}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata: {name: promtail-local}
+rules:
+- apiGroups: [""]
+  resources: [nodes, nodes/proxy, services, endpoints, pods]
+  verbs: [get, watch, list]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata: {name: promtail-local}
+roleRef: {apiGroup: rbac.authorization.k8s.io, kind: ClusterRole, name: promtail-local}
+subjects: [{kind: ServiceAccount, name: promtail-local, namespace: observability}]
+---
+apiVersion: v1
+kind: ConfigMap
+metadata: {name: promtail-local-config, namespace: observability}
+data:
+  config.yaml: |
+    server: {http_listen_port: 9080, grpc_listen_port: 0}
+    positions: {filename: /run/promtail/positions.yaml}
+    clients: [{url: http://loki:3100/loki/api/v1/push}]
+    scrape_configs:
+    - job_name: cafe-boreal-pods
+      static_configs:
+      - targets: [localhost]
+        labels:
+          job: cafe-boreal
+          namespace: cafe-boreal
+          __path__: /var/log/pods/cafe-boreal_*/*/*.log
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata: {name: promtail-local, namespace: observability}
+spec:
+  selector: {matchLabels: {app: promtail-local}}
+  template:
+    metadata: {labels: {app: promtail-local}}
+    spec:
+      serviceAccountName: promtail-local
+      containers:
+      - name: promtail
+        image: grafana/promtail:3.5.3
+        args: [-config.file=/etc/promtail/config.yaml]
+        resources: {requests: {cpu: 25m, memory: 64Mi}, limits: {cpu: 250m, memory: 256Mi}}
+        volumeMounts: [{name: config, mountPath: /etc/promtail}, {name: run, mountPath: /run/promtail}, {name: logs, mountPath: /var/log/pods, readOnly: true}]
+      volumes: [{name: config, configMap: {name: promtail-local-config}}, {name: run, emptyDir: {}}, {name: logs, hostPath: {path: /var/log/pods}}]

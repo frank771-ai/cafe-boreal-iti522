@@ -1,0 +1,30 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: cafe-boreal-apis
+  namespace: observability
+  labels: {release: monitoring}
+spec:
+  namespaceSelector: {matchNames: [cafe-boreal]}
+  selector:
+    matchExpressions: [{key: app, operator: In, values: [catalog, orders, customers]}]
+  endpoints: [{port: http, path: /metrics, interval: 15s}]
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cafe-boreal-dashboard
+  namespace: observability
+  labels: {grafana_dashboard: "1"}
+data:
+  cafe-boreal.json: |
+    {
+      "title":"Café Boreal - Operación","uid":"cafe-boreal","schemaVersion":39,"version":1,"refresh":"15s",
+      "tags":["cafe-boreal","iti-522"],"time":{"from":"now-1h","to":"now"},
+      "panels":[
+        {"type":"timeseries","title":"CPU por pod","gridPos":{"x":0,"y":0,"w":12,"h":8},"targets":[{"expr":"sum(rate(container_cpu_usage_seconds_total{namespace=\"cafe-boreal\",container!=\"\"}[5m])) by (pod)","legendFormat":"{{pod}}"}]},
+        {"type":"timeseries","title":"Memoria por pod","gridPos":{"x":12,"y":0,"w":12,"h":8},"targets":[{"expr":"sum(container_memory_working_set_bytes{namespace=\"cafe-boreal\",container!=\"\"}) by (pod)","legendFormat":"{{pod}}"}]},
+        {"type":"timeseries","title":"Errores HTTP 5xx","gridPos":{"x":0,"y":8,"w":12,"h":8},"targets":[{"expr":"sum(rate(http_requests_total{status=~\"5..\"}[5m])) by (handler)","legendFormat":"{{handler}}"}]},
+        {"type":"timeseries","title":"Latencia p95","gridPos":{"x":12,"y":8,"w":12,"h":8},"targets":[{"expr":"histogram_quantile(0.95,sum(rate(http_request_duration_seconds_bucket[5m])) by (le,handler))","legendFormat":"{{handler}}"}]}
+      ]
+    }
