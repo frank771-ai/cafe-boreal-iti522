@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Café Boreal | Administración</title>
+  <link rel="manifest" href="/manifest.json"><link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+<header><div><span class="eyebrow">CAFÉ BOREAL S.R.L.</span><h1>Centro de operaciones</h1></div><span id="status" class="pill">Verificando servicios…</span></header>
+<nav><button data-tab="products" class="active">Productos</button><button data-tab="orders">Pedidos</button><button data-tab="customers">Clientes</button><button data-tab="legacy">Inventario legado</button><button data-tab="about">Acerca de</button></nav>
+<main>
+  <section id="products" class="tab active"><div class="section-head"><div><h2>Catálogo</h2><p>Inventario moderno en PostgreSQL.</p></div><button class="primary" onclick="productDialog.showModal()">Nuevo producto</button></div><div id="productGrid" class="grid"></div></section>
+  <section id="orders" class="tab"><div class="section-head"><div><h2>Pedidos</h2><p>Totales calculados en el servidor y descuento transaccional de existencias.</p></div><button class="primary" onclick="orderDialog.showModal()">Crear pedido</button></div><div id="orderList"></div></section>
+  <section id="customers" class="tab"><div class="section-head"><div><h2>Clientes</h2><p>La identidad se muestra en claro aquí, pero se almacena cifrada.</p></div><button class="primary" onclick="customerDialog.showModal()">Nuevo cliente</button></div><div id="customerList"></div></section>
+  <section id="legacy" class="tab"><div class="section-head"><div><h2>Inventario legado</h2><p>Fuente PHP/Apache/SQLite de solo lectura para comparación.</p></div><button onclick="loadLegacy()">Actualizar</button></div><div id="legacyList"></div></section>
+  <section id="about" class="tab"><article><h2>Acerca de esta entrega</h2><p>Proyecto de Esteban Molina y Franklin Castillo para ITI-522.</p><p><strong>Frase antifraude:</strong> CAFÉ BOREAL NAVEGA SEGURO BAJO LA AURORA 2026.</p><p>Arquitectura local reproducible con k3s, PostgreSQL, Nginx, PHP/Apache y observabilidad.</p></article></section>
+</main>
+<dialog id="productDialog"><form id="productForm"><h3>Nuevo producto</h3><input name="nombre" placeholder="Nombre" required><input name="precio" type="number" step="0.01" min="0.01" placeholder="Precio" required><input name="stock" type="number" min="0" placeholder="Stock" required><input name="descripcion" placeholder="Descripción"><input name="imagen" placeholder="URL de imagen"><div><button type="button" onclick="productDialog.close()">Cancelar</button><button class="primary">Guardar</button></div></form></dialog>
+<dialog id="customerDialog"><form id="customerForm"><h3>Nuevo cliente</h3><input name="nombre" placeholder="Nombre" required><input name="email" type="email" placeholder="Correo" required><input name="numero_identidad" placeholder="Número de identidad" required><div><button type="button" onclick="customerDialog.close()">Cancelar</button><button class="primary">Guardar cifrado</button></div></form></dialog>
+<dialog id="orderDialog"><form id="orderForm"><h3>Crear pedido</h3><input name="customer_id" type="number" min="1" placeholder="ID cliente" required><input name="product_id" type="number" min="1" placeholder="ID producto" required><input name="cantidad" type="number" min="1" value="1" required><div><button type="button" onclick="orderDialog.close()">Cancelar</button><button class="primary">Crear</button></div></form></dialog>
+<footer>Operación local protegida por HTTPS · Café Boreal 2026</footer><script src="/app.js"></script>
+</body></html>
